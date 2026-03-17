@@ -99,4 +99,4 @@ esmc-analysis-pipeline/
 
 ## License
 
-MIT License
+Apache License 2.0 - see [LICENSE](https://github.com/espickle1/esmc-analysis-pipeline/blob/main/LICENSE)
