@@ -1,8 +1,17 @@
 """
 Analysis Package
 
-Functions for entropy calculation, logits analysis, and visualization.
+Functions for entropy calculation, logits analysis, Hamming distance
+analysis, and visualization.
 """
+
+from .hamming_lib import (
+    find_hamming_pairs,
+    find_hamming_pairs_from_csv,
+    save_hamming_results,
+    hamming_distance,
+    parse_date,
+)
 
 from .entropy_lib import (
     calculate_entropy,
@@ -26,6 +35,12 @@ from .logits_lib import (
 )
 
 __all__ = [
+    # Hamming
+    "find_hamming_pairs",
+    "find_hamming_pairs_from_csv",
+    "save_hamming_results",
+    "hamming_distance",
+    "parse_date",
     # Entropy
     "calculate_entropy",
     "calculate_entropy_batched",
