@@ -2,7 +2,7 @@
 
 Four Colab notebooks for protein analysis using ESM (Evolutionary Scale Modeling) from https://github.com/Biohub/esm.
 
-## Notebooks (9 total)
+## Notebooks (10 total)
 
 ### 1. **ESMC Local** (`1_ESMC_Local.ipynb`)
 **Run ESMC locally on Colab GPU**
@@ -255,6 +255,35 @@ Same fine-tuning as notebook 8, but runs remotely on Modal for more reliability 
 
 ---
 
+### 10. **ESMFold2 Local** (`10_ESMFold2_Local.ipynb`)
+**Run ESMFold2 directly on the Colab GPU**
+
+Load the ESMFold2 model onto the Colab GPU and predict 3D structures locally — no API key, no Modal account, no Forge credentials.
+
+**Key Concept:**
+- Model runs entirely on the Colab runtime's GPU (like notebook 1 does for ESMC)
+- Full control over inference; nothing leaves the runtime
+- Compare with notebook 4 (Biohub API) and notebook 5 (Modal serverless)
+
+**Features:**
+- Local GPU inference (A100/T4 in Colab)
+- Per-residue pLDDT and overall pTM confidence
+- Interactive 3D visualization with py3Dmol
+- CA-backbone PDB output with pLDDT in the B-factor column
+
+**Outputs:**
+- `{seq_id}_structure.pdb` - 3D structure (PDB format)
+- `{seq_id}_metrics.json` - Confidence scores & model info
+- `confidence_analysis.png` - pLDDT plots per structure
+- `prediction_summary.csv` - Summary table
+
+**When to use:** Quick, self-contained structure prediction when you have a Colab GPU and don't want to set up any external service. Best for a handful of small-to-medium proteins; for large batches use Modal (notebook 5).
+
+**Requirements:**
+- Colab GPU runtime (Runtime → Change runtime type → GPU; A100 recommended)
+
+---
+
 ## Quick Start
 
 1. **Copy a notebook to Google Colab:**
@@ -377,17 +406,17 @@ All outputs are downloadable from Colab's file browser.
 
 ## Comparison: Execution Methods
 
-### **Structure Prediction (Notebooks 4 & 5)**
+### **Structure Prediction (Notebooks 4, 5 & 10)**
 
-| Feature | Biohub (Notebook 4) | Modal (Notebook 5) |
-|---------|-------------------|-------------------|
-| **Authentication** | Forge credentials | Modal API token |
-| **Setup** | Simple (just credentials) | Slightly more complex (app definition) |
-| **GPU** | Shared infrastructure | Dedicated H100 |
-| **Cost/prediction** | ~$0.05-0.10 | ~$0.02-0.03 (cheaper) |
-| **Caching** | Per-session | Persistent across runs |
-| **Scaling** | Sequential | Up to 10+ concurrent |
-| **Best for** | Single/few structures | High-throughput (100+) |
+| Feature | Biohub (Notebook 4) | Modal (Notebook 5) | Local (Notebook 10) |
+|---------|-------------------|-------------------|--------------------|
+| **Authentication** | Forge credentials | Modal API token | None |
+| **Setup** | Simple (just credentials) | Slightly more complex (app definition) | None (just GPU runtime) |
+| **GPU** | Shared infrastructure | Dedicated H100 | Colab A100/T4 |
+| **Cost/prediction** | ~$0.05-0.10 | ~$0.02-0.03 (cheaper) | Free (Colab) |
+| **Caching** | Per-session | Persistent across runs | Per-session |
+| **Scaling** | Sequential | Up to 10+ concurrent | Sequential (GPU-bound) |
+| **Best for** | Single/few structures | High-throughput (100+) | Quick self-contained runs |
 
 ### **Mutation Scoring (Notebooks 6 & 7)**
 
@@ -416,6 +445,7 @@ All outputs are downloadable from Colab's file browser.
 | **Best for** | Experiments, prototyping | Production, reliable fine-tuning |
 
 **Choice guide:**
+- **Structures, no account, have a Colab GPU**: Use Local (notebook 10)
 - **Structures, 1-10**: Use Biohub (simpler setup)
 - **Structures, 100+**: Use Modal (cheaper, faster)
 - **Mutations, 1-5 proteins**: Use Colab local (free, no setup)
@@ -491,6 +521,7 @@ If you use these notebooks, please cite:
 | 7 | Mutation Scoring Modal | Engineering | H100 | Modal | Batch scoring |
 | 8 | Fine-Tuning Colab | Fine-Tuning | Local | None | Custom tasks (local) |
 | 9 | Fine-Tuning Modal | Fine-Tuning | H100 | Modal | Custom tasks (batch) |
+| 10 | ESMFold2 Local | Structures | Local | None | Self-contained structures |
 
 ## Further Reading
 
@@ -506,7 +537,7 @@ If you use these notebooks, please cite:
 
 **Created:** June 2026  
 **Based on:** Biohub ESM repository (main branch)  
-**Total Notebooks:** 9  
+**Total Notebooks:** 10  
 **Coverage:**
 - Sequence analysis: embeddings, conservation, interpretability
 - Structure prediction: local, Biohub API, Modal
